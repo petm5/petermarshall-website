@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Blog",
+    "desc": "Latest Posts",
+    "href": "/blog/"
+  },
+  {
+    "name": "About",
+    "href": "/#main"
+  }
+]

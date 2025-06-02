@@ -1,0 +1,123 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #121117;
+  color: #aab;
+  --faded-color: #889;
+  --link-color: #9ac;
+  font-family: Roboto,sans-serif;
+  --layout-spacing: clamp(1rem, 6vw, 6rem);
+  --elem-spacing: 2em;
+  --side-spacing: clamp(1rem, 5vw, 3rem);
+  --navbar-height: 50px;
+  --content-max-width: 75ch;
+  padding: 0;
+  line-height: 1.5;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  width: 100%;
+}
+
+main {
+  padding: 0;
+  padding-top: var(--layout-spacing);
+  display: grid;
+  grid-auto-rows: max-content;
+  grid-template-columns: [full-start] minmax(0, 1fr) [breakout-start] var(--side-spacing) [main-start] minmax(0, var(--content-max-width)) [main-end] var(--side-spacing) [breakout-end] minmax(0, 1fr) [full-end];
+  > * {
+    grid-column: main;
+  }
+}
+
+footer {
+  margin: 0 auto;
+  width: 100%;
+  max-width: calc(var(--content-max-width) + 2 * var(--side-spacing));
+  padding: 0 var(--side-spacing);
+  padding-top: var(--layout-spacing);
+  padding-bottom: 1em !important;
+  color: var(--faded-color);
+  margin-top: auto !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+footer > * {
+  font-size: smaller;
+}
+
+main img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 1em 0;
+}
+
+.semantic-info {
+  display: none;
+}
+
+main > *:first-child img {
+  margin-top: 0 !important;
+}
+
+:is(h1, h2, h3) {
+  line-height: 1.2;
+  background: linear-gradient(to right bottom, #fff 30%, #fff8 100%);
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: #fffe;
+  scroll-margin-top: calc(var(--navbar-height) + 2rem);
+}
+
+:is(h2, h3):not(:first-child) {
+  margin-top: 2em;
+}
+
+:is(h1, h2, h3) > a {
+  text-decoration: none;
+  color: unset;
+  display: block;
+  width: 100%;
+}
+
+:is(h1, h2, h3) > a:hover {
+  text-decoration: underline;
+}
+
+main > * + * {
+  margin-top: 1em;
+}
+
+table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: fit-content;
+  box-shadow: 0px 3px 50px black;
+}
+
+a {
+  color: var(--link-color);
+  text-underline-offset: 0.15em;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td, th {
+  padding: 6px 10px;
+  border: 1px solid;
+}
