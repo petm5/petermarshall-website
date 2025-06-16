@@ -19,25 +19,35 @@
 </header>
 
 <style>
-  @keyframes slide-down {
-    0% { transform: translateY(-6px); filter: opacity(0) }
-    100% {}
-  }
   header {
     width: 100%;
     height: 3.5rem;
     display: flex;
-    background: #1118;
-    border-bottom: 1px solid #eee2;
-    backdrop-filter: blur(30px);
     position: sticky;
     top: 0;
     z-index: 2;
     color: #dee;
+    box-shadow: 0 0 4px #0006, 0 0 30px 0 #0002, 0 0 1px 1px #fff6;
+    background: #20263440;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    height: 250%;
+    mask-image: linear-gradient(to bottom, black 0% 40%, transparent 40% 100%);
+    backdrop-filter: contrast(0.9) brightness(0.8) saturate(1.5) blur(40px);
+    filter: url(/glass-shader.svg#glass);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 2px 2px 30px -7px rgba(255, 255, 255, 0.1);
   }
   :global(body:has(.hero)) header {
     position: fixed;
-    animation: .8s ease backwards slide-down;
   } 
   .content {
     max-width: 80rem;
@@ -47,6 +57,8 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    z-index: 1;
+    text-shadow: 0 0 3px #0008;
   }
   nav {
     display: flex;
@@ -63,7 +75,7 @@
   li {
     display: inline-block;
     font-size: .95rem;
-    font-weight: 300;
+    font-weight: 400;
     margin-left: 1.25rem;
   }
   a {

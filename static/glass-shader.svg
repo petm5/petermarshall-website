@@ -1,0 +1,31 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" style="display: none">
+  <defs>
+    <filter id="glass" style="color-interpolation-filters:sRGB">
+      <feTurbulence type="fractalNoise"
+        baseFrequency="0.015"
+        numOctaves="2"
+        result="result1"
+        seed="0" />
+      <feComponentTransfer
+        id="feComponentTransfer39"
+        result="mapped">
+        <feFuncR
+          type="gamma"
+          amplitude="1"
+          exponent="2.45"
+          offset="0.28" />
+        <feFuncB
+          type="gamma"
+          amplitude="1"
+          offset="0.38"
+          exponent="3.25" />
+      </feComponentTransfer>
+      <feDisplacementMap
+         in2="mapped"
+         scale="100"
+         xChannelSelector="R"
+         yChannelSelector="B"
+         in="SourceGraphic" />
+    </filter>
+  </defs>
+</svg>
