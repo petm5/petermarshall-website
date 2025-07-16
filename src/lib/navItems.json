@@ -6,7 +6,12 @@
   {
     "name": "About",
     "desc": "About Me",
-    "href": "/about"
+    "href": "/about/"
+  },
+  {
+    "name": "Projects",
+    "desc": "My Projects",
+    "href": "/projects/"
   },
   {
     "name": "Contact",
