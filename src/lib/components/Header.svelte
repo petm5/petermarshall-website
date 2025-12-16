@@ -38,7 +38,7 @@
     height: 250%;
     mask-image: linear-gradient(to bottom, black 0% 40%, transparent 40% 100%);
     backdrop-filter: contrast(0.9) brightness(0.8) saturate(1.5) blur(40px);
-    filter: url(/glass-shader.svg#glass);
+    filter: url('$lib/assets/glass-shader.svg#glass');
   }
   header::after {
     content: '';
