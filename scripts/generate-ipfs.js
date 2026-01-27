@@ -18,12 +18,17 @@ class RawDirBlockstore extends BlackHoleBlockstore {
 
 const generate = async () => {
   const distDir = path.resolve('build')
-  const blocksDir = path.resolve('ipfs-blocks');
+  const blocksDir = path.join(distDir, 'ipfs');
   const blockstore = new RawDirBlockstore(blocksDir);
 
   await fs.mkdir(blocksDir, { recursive: true });
 
-  const paths = await glob('**/*', { cwd: distDir, nodir: true });
+  const paths = await glob('**/*', {
+    cwd: distDir,
+    nodir: true,
+    ignore: ['ipfs/**']
+  });
+
   const source = await Promise.all(paths.map(async (p) => ({
     path: p,
     content: await fs.readFile(path.join(distDir, p))
