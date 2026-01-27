@@ -49,6 +49,8 @@ const generate = async () => {
     rootCid = entry.cid;
   }
 
+  await fs.writeFile(path.join(blocksDir, 'root'), rootCid.toString())
+
   console.log(`\n✅ Done!`);
   console.log(`🌐 Root CID: ${rootCid}`);
 }
