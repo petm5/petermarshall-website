@@ -1,5 +1,5 @@
 <script>
-  import logo from '$lib/assets/logo-glow.png';
+  import logo from '$lib/assets/logo-glow.png?format=avif&w=512';
   import { title } from '$lib/site.json';
 </script>
 
