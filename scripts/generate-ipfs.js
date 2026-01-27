@@ -21,6 +21,8 @@ const generate = async () => {
   const blocksDir = path.join(distDir, 'ipfs');
   const blockstore = new RawDirBlockstore(blocksDir);
 
+  console.log('📦 Generating IPFS block store')
+
   await fs.mkdir(blocksDir, { recursive: true });
 
   const paths = await glob('**/*', {
