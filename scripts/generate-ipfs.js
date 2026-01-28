@@ -55,11 +55,13 @@ const generate = async () => {
   const paths = await glob('**/*', {
     cwd: distDir,
     nodir: true,
-    ignore: ['ipfs/**']
+    // Ignore our own output paths
+    ignore: ['ipfs/**', 'routing/**']
   });
 
   const source = await Promise.all(paths.map(async (p) => ({
-    path: p,
+    // Collect everything into a virtual top-level dir
+    path: path.join('content', p),
     content: await fs.readFile(path.join(distDir, p))
   })));
 
@@ -77,6 +79,7 @@ const generate = async () => {
   let rootCid;
   for await (const entry of importer(source, blockstore, options)) {
     rootCid = entry.cid;
+    // console.log(`📁 Ingested file: ${entry.path} -> ${entry.cid}`);
   }
 
   await fs.writeFile(path.join(blocksDir, 'root'), rootCid.toString())
