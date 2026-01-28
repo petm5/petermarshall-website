@@ -3,5 +3,6 @@ with pkgs;
 mkShellNoCC {
   packages = [
     nodejs
+    wrangler
   ];
 }
