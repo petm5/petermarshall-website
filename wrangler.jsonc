@@ -2,7 +2,7 @@
   "name": "petermarshall-ca",
   "compatibility_date": "2025-05-23",
   "build": {
-    "command": "npm run build && npm run generate-ipfs && npm run publish-ipfs"
+    "command": "npm run build-all"
   },
   "assets": {
     "directory": "build",

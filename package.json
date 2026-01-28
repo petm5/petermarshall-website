@@ -9,7 +9,8 @@
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"generate-ipfs": "node scripts/generate-ipfs.js",
-		"publish-ipfs": "node scripts/publish-ipfs.ts"
+		"publish-ipfs": "node scripts/publish-ipfs.ts",
+		"build-all": "vite build && node scripts/generate-ipfs.js && node scripts/publish-ipfs.ts"
 	},
 	"devDependencies": {
 		"@chainsafe/libp2p-noise": "^17.0.0",
