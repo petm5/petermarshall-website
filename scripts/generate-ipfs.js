@@ -62,7 +62,7 @@ const generate = async () => {
   const source = await Promise.all(paths.map(async (p) => ({
     // Collect everything into a virtual top-level dir
     path: path.join('content', p),
-    content: await fs.readFile(path.join(distDir, p))
+    content: (await fs.open(path.join(distDir, p))).createReadStream()
   })));
 
   console.log(`🚀 Processing ${source.length} files from ${blocksDir.toString()}...`);
