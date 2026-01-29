@@ -11,7 +11,8 @@
 		"build-ipfs": "node scripts/generate-ipfs.js",
 		"build-ipni": "node scripts/generate-ipni.ts",
 		"build-all": "vite build && node scripts/generate-ipfs.js && node scripts/generate-ipni.ts",
-		"dht-provide": "node scripts/publish-ipfs.ts"
+		"dht-provide": "node scripts/publish-ipfs.ts",
+		"ipni-provide": "node scripts/provide-ipni.ts"
 	},
 	"devDependencies": {
 		"@chainsafe/libp2p-noise": "^17.0.0",

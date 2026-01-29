@@ -80,6 +80,8 @@ export const generate = async () => {
 
   await fs.writeFile(path.join(advertDir, 'head'), rootCid)
 
+  await fs.writeFile(path.join(advertDir, 'id'), peerId.toString())
+
   console.log(`\n✅ Done!`);
   console.log(`🌐 Advertisement CID: ${rootCid}`);
 }
