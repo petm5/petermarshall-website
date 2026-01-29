@@ -17,3 +17,6 @@
 
 /routing/v1/providers/:cid
   Content-Type: application/json
+
+/ipni/v1/ad/:cid
+  Content-Type: application/octet-stream
