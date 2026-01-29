@@ -4,9 +4,11 @@ import { glob } from 'glob'
 import { CID } from 'multiformats/cid'
 import * as Block from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
+
 import type { BlockView } from 'multiformats/block/interface'
 import * as dagJson from '@ipld/dag-json'
-import { createEd25519PeerId } from '@libp2p/peer-id-factory'
+import { privateKeyFromRaw, generateKeyPair, privateKeyToProtobuf, publicKeyToProtobuf } from '@libp2p/crypto/keys'
+import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 
 import { Provider, Advertisement } from '@web3-storage/ipni'
 import { EntryChunk, RECOMMENDED_MAX_BLOCK_BYTES } from '@web3-storage/ipni/entry-chunk.js'
@@ -19,7 +21,25 @@ const distDir = path.resolve('build')
 const blocksDir = path.join(distDir, 'ipfs')
 const advertDir = path.join(distDir, 'ipni', 'v1', 'ad')
 
-const peerId = await createEd25519PeerId()
+const loadKey = async () => {
+  const b64Key = process.env.IPFS_PRIVATE_KEY
+
+  let key;
+  if (b64Key) {
+    key = await privateKeyFromRaw(Buffer.from(b64Key, 'base64'))
+  } else {
+    console.warn('⚠️ WARNING: Using random keypair. This is probably not what you want.')
+    key = await generateKeyPair('Ed25519')
+  }
+
+  return {
+    id: peerIdFromPrivateKey(key),
+    privateKey: privateKeyToProtobuf(key),
+    publicKey: publicKeyToProtobuf(key.publicKey)
+  }
+}
+
+const peerId = await loadKey()
 
 export const generate = async () => {
   console.log(`🌌 Generating updated IPNI records`)
@@ -80,7 +100,7 @@ export const generate = async () => {
 
   await fs.writeFile(path.join(advertDir, 'head'), rootCid)
 
-  await fs.writeFile(path.join(advertDir, 'id'), peerId.toString())
+  await fs.writeFile(path.join(advertDir, 'id'), peerId.publicKey.toString())
 
   console.log(`\n✅ Done!`);
   console.log(`🌐 Advertisement CID: ${rootCid}`);
