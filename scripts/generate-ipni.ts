@@ -56,18 +56,15 @@ export const generate = async () => {
 
   console.log(`🚀 Creating advertisement for ${cids.length} CIDs...`)
 
-  const context = new Uint8Array([99])
+  const context = new Uint8Array([0xa0, 0x12])
   const previous = null
 
-  const http4 = new Provider({
+  const http = new Provider({
     protocol: 'http',
-    addresses: `/dns4/${webHost}/tcp/443/https`,
-    peerId
-  })
-
-  const http6 = new Provider({
-    protocol: 'http',
-    addresses: `/dns6/${webHost}/tcp/443/https`,
+    addresses: [
+      `/dns4/${webHost}/tcp/443/https`,
+      `/dns6/${webHost}/tcp/443/https`
+    ],
     peerId
   })
 
@@ -87,7 +84,7 @@ export const generate = async () => {
   await writeBlock(entryBlock)
 
   const advert = new Advertisement({
-    providers: [http4, http6],
+    providers: [http],
     entries: entryBlock.cid,
     context,
     previous
