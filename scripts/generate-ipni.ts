@@ -26,20 +26,20 @@ const loadKey = async () => {
 
   let key;
   if (b64Key) {
-    key = await privateKeyFromRaw(Buffer.from(b64Key, 'base64'))
+    return await privateKeyFromRaw(Buffer.from(b64Key, 'base64'))
   } else {
     console.warn('⚠️ WARNING: Using random keypair. This is probably not what you want.')
-    key = await generateKeyPair('Ed25519')
-  }
-
-  return {
-    id: peerIdFromPrivateKey(key),
-    privateKey: privateKeyToProtobuf(key),
-    publicKey: publicKeyToProtobuf(key.publicKey)
+    return await generateKeyPair('Ed25519')
   }
 }
 
-const peerId = await loadKey()
+const privKey = await loadKey()
+
+const peerId = {
+  id: peerIdFromPrivateKey(privKey),
+  privateKey: privateKeyToProtobuf(privKey),
+  publicKey: publicKeyToProtobuf(privKey.publicKey)
+}
 
 export const generate = async () => {
   console.log(`🌌 Generating updated IPNI records`)
@@ -51,6 +51,8 @@ export const generate = async () => {
   })
 
   const cids: Array<CID> = paths.map((p) => CID.parse(p.toString()))
+
+  console.log(`🔑 Using PeerID: ${privKey.publicKey.toString()}`)
 
   console.log(`🚀 Creating advertisement for ${cids.length} CIDs...`)
 
@@ -100,7 +102,7 @@ export const generate = async () => {
 
   await fs.writeFile(path.join(advertDir, 'head'), rootCid)
 
-  await fs.writeFile(path.join(advertDir, 'id'), peerId.publicKey.toString())
+  await fs.writeFile(path.join(advertDir, 'id'), privKey.publicKey.toString())
 
   console.log(`\n✅ Done!`);
   console.log(`🌐 Advertisement CID: ${rootCid}`);
