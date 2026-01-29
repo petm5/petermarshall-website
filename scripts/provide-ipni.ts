@@ -24,6 +24,8 @@ const provide = async () => {
     `/dns6/${webHost}/tcp/443/https/p2p/${peerId}`
   ]
 
+  console.log('🌐 Announcing multiaddrs:', announceAddrs)
+
   const addrs = announceAddrs.map((a) => Buffer.from(multiaddr(a).bytes).toString('base64'))
 
   const payload = JSON.stringify({
