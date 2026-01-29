@@ -8,6 +8,7 @@ import { sha256 } from 'multiformats/hashes/sha2'
 import type { BlockView } from 'multiformats/block/interface'
 import * as dagCbor from '@ipld/dag-cbor'
 import { privateKeyFromRaw, generateKeyPair } from '@libp2p/crypto/keys'
+import type { PrivateKey } from '@libp2p/interface'
 import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 
 import { RecordEnvelope } from '@libp2p/peer-record'
@@ -67,10 +68,77 @@ const CHUNK_THRESHOLD = 1_048_576
 
 // Signals that the provider is a Trustless Gateway
 // https://github.com/ipni/specs/blob/main/IPNI.md#metadata
-const HTTP_PREFIX = new Uint8Array(varint.encode(0x0920))
+const TRUSTLESS_GATEWAY_PREFIX = new Uint8Array(varint.encode(0x0920))
 
 // https://github.com/ipni/go-libipni/blob/afe2d8ea45b86c2a22f756ee521741c8f99675e5/ingest/schema/envelope.go#L20-L22
 const AD_SIG_CODEC = new TextEncoder().encode('/indexer/ingest/adSignature')
+
+enum EntryProtocol {
+  TrustlessGateway,
+  IPNS
+}
+
+interface Provider {
+  peerId: string,
+  privateKey: PrivateKey,
+  addresses: Array<string>
+}
+
+class Advertisement {
+  constructor(
+    public entryCid: CID,
+    public protocol: EntryProtocol,
+    public provider: Provider,
+    public context: Uint8Array
+  ) {}
+  getProtocolBytes(): Uint8Array {
+    switch (this.protocol) {
+      case EntryProtocol.TrustlessGateway:
+        return TRUSTLESS_GATEWAY_PREFIX
+      case EntryProtocol.IPNS:
+        return IPNS_PREFIX
+      default:
+        throw new Error('Invalid IPNI Entry protocol specified')
+    }
+  }
+  async encodeAndSign() {
+    const metadata = this.getProtocolBytes()
+
+    // Ugly data payload serialization - https://github.com/ipni/go-libipni/blob/afe2d8ea45b86c2a22f756ee521741c8f99675e5/ingest/schema/envelope.go#L84
+    const serializedAd = new Uint8Array([
+      ...this.entryCid.bytes,
+      ...new TextEncoder().encode(this.provider.peerId),
+      ...new TextEncoder().encode(this.provider.addresses.map(a => a.toString()).join('')),
+      ...metadata,
+      0 // IsRm field is always false
+    ])
+    const serializedAdDigest = (await sha256.digest(serializedAd)).bytes
+
+    const record = {
+      codec: AD_SIG_CODEC,
+      domain: 'indexer',
+      marshal: () => serializedAdDigest,
+      equals: () => false
+    }
+
+    const signature = (await RecordEnvelope.seal(record, this.provider.privateKey)).marshal().subarray()
+
+    // IPNI Advertisement - https://github.com/ipni/specs/blob/main/IPNI.md#advertisements
+    return {
+      Provider: this.provider.peerId,
+      Addresses: this.provider.addresses,
+      Entries: this.entryCid,
+      ContextID: this.context,
+      Metadata: metadata,
+      IsRm: false,
+      Signature: signature
+    }
+  }
+  async export() {
+    const signedAd = await this.encodeAndSign()
+    return await Block.encode({ value: signedAd, codec: dagCbor, hasher: sha256 })
+  }
+}
 
 export const generate = async () => {
   console.log(`🌌 Generating updated IPNI records`)
@@ -110,37 +178,13 @@ export const generate = async () => {
     `/dns6/${webHost}/tcp/443/https`
   ]
 
-  // Ugly data payload serialization - https://github.com/ipni/go-libipni/blob/afe2d8ea45b86c2a22f756ee521741c8f99675e5/ingest/schema/envelope.go#L84
-  const serializedAd = new Uint8Array([
-    ...entryBlock.cid.bytes,
-    ...new TextEncoder().encode(peerId.toString()),
-    ...new TextEncoder().encode(addresses.map(a => a.toString()).join('')),
-    ...HTTP_PREFIX,
-    0 // IsRm field is always false
-  ])
-  const serializedAdDigest = (await sha256.digest(serializedAd)).bytes
+  const signedAdBlock = await new Advertisement(
+    entryBlock.cid,
+    EntryProtocol.TrustlessGateway,
+    { peerId: peerId.toString(), privateKey: privKey, addresses },
+    context
+  ).export()
 
-  const record = {
-    codec: AD_SIG_CODEC,
-    domain: 'indexer',
-    marshal: () => serializedAdDigest,
-    equals: () => false
-  }
-
-  const signature = (await RecordEnvelope.seal(record, privKey)).marshal().subarray()
-
-  // IPNI Advertisement - https://github.com/ipni/specs/blob/main/IPNI.md#advertisements
-  const signedAd = {
-    Provider: peerId.toString(),
-    Addresses: addresses,
-    Entries: entryBlock.cid,
-    ContextID: context,
-    Metadata: HTTP_PREFIX,
-    IsRm: false,
-    Signature: signature
-  }
-
-  const signedAdBlock = await Block.encode({ value: signedAd, codec: dagCbor, hasher: sha256 })
   const headCid = signedAdBlock.cid.toString()
 
   await writeBlock(signedAdBlock)
