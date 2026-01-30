@@ -196,8 +196,9 @@ export const generate = async () => {
   const ipnsRecord = await createIPNSRecord(privKey, ipnsValue, ipnsSequence, ipnsLifetime)
   const marshalledRecord = marshalIPNSRecord(ipnsRecord)
 
-  // Advertisement requires an empty set of entries
   const ipnsEntryChunk = new EntryChunk()
+  ipnsEntryChunk.add(privKey.publicKey.toMultihash().bytes)
+
   const ipnsEntryBlock = await ipnsEntryChunk.export()
   await writeBlock(ipnsEntryBlock)
 
