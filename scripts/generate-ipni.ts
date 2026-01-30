@@ -4,6 +4,7 @@ import { glob } from 'glob'
 import { CID } from 'multiformats'
 import * as Block from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
+import { base36 } from 'multiformats/bases/base36'
 
 import type { BlockView } from 'multiformats/block/interface'
 import * as dagCbor from '@ipld/dag-cbor'
@@ -225,7 +226,7 @@ export const generate = async () => {
 
   console.log(`\n✅ Done!`);
   console.log(`🌐 Advertisement CID: ${headCid}`);
-  console.log(`🌐 IPNS name: /ipns/${privKey.publicKey.toCID().toString()}`);
+  console.log(`🌐 IPNS name: /ipns/${privKey.publicKey.toCID().toV1().toString(base36)}`);
 }
 
 export const writeBlock = async (block: BlockView) => {
