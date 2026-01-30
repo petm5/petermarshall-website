@@ -194,6 +194,8 @@ export const generate = async () => {
   const ipnsSequence = Date.now()
 
   const ipnsRecord = await createIPNSRecord(privKey, ipnsValue, ipnsSequence, ipnsLifetime)
+
+  // Returns raw protobuf with no length prefix
   const marshalledRecord = marshalIPNSRecord(ipnsRecord)
 
   const ipnsEntryChunk = new EntryChunk()
@@ -207,6 +209,7 @@ export const generate = async () => {
   // https://github.com/ipni/go-naam/blob/7319ed2cbb9d46eb560e6423ccd9d9a97874f826/naam.go#L425-L434
   const ipnsMetadata = new Uint8Array([
     ...IPNS_RECORD_PREFIX,
+    ...varint.encode(marshalledRecord.length),
     ...marshalledRecord
   ])
 
