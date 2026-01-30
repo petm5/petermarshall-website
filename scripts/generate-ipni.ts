@@ -228,6 +228,8 @@ export const generate = async () => {
 
   await fs.writeFile(path.join(advertDir, 'id'), peerId.toString())
 
+  await fs.writeFile(path.join(advertDir, 'ipns'), marshalledRecord)
+
   console.log(`\n✅ Done!`);
   console.log(`🌐 Advertisement CID: ${headCid}`);
   console.log(`🌐 IPNS name: /ipns/${privKey.publicKey.toCID().toV1().toString(base36)}`);
