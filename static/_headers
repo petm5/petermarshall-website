@@ -1,5 +1,6 @@
 /*
   Cache-Control: public, max-age=300
+  x-ipfs-path: /ipns/kzwfwjn5ji4puu7gt0365ypbkdz3qew1om9jlby68tzevvrvq2kygmk12offskn
 
 /_app/immutable/*
   ! Cache-Control
@@ -8,6 +9,7 @@
 
 /ipfs/:cid
   ! Cache-Control
+  ! x-ipfs-path
   Cache-Control: public, max-age=31536000, immutable
   Content-Disposition: attachment; filename=":cid.bin"
   Content-Type: application/vnd.ipld.raw
@@ -17,6 +19,8 @@
 
 /routing/v1/providers/:cid
   Content-Type: application/json
+  ! x-ipfs-path
 
 /ipni/v1/ad/:cid
   Content-Type: application/octet-stream
+  ! x-ipfs-path
