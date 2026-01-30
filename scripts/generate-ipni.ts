@@ -225,6 +225,7 @@ export const generate = async () => {
 
   console.log(`\n✅ Done!`);
   console.log(`🌐 Advertisement CID: ${headCid}`);
+  console.log(`🌐 IPNS name: /ipns/${privKey.publicKey.toCID().toString()}`);
 }
 
 export const writeBlock = async (block: BlockView) => {
