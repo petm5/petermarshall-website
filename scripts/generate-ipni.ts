@@ -13,6 +13,8 @@ import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 
 import { RecordEnvelope } from '@libp2p/peer-record'
 
+import { createIPNSRecord, marshalIPNSRecord } from 'ipns'
+
 import varint from 'varint'
 
 import site from '../src/lib/site.json' with { type: 'json' }
@@ -66,17 +68,20 @@ class EntryChunk {
 // libp2p doesn't like blocks over 1MB
 const CHUNK_THRESHOLD = 1_048_576
 
-// Signals that the provider is a Trustless Gateway
+// Entries are Trustless Gateway providers
 // https://github.com/ipni/specs/blob/main/IPNI.md#metadata
+// https://github.com/multiformats/go-multicodec/blob/f57c73871939a0d533597e1dae416dae92533fb6/code_table.go#L459-L460
 const TRUSTLESS_GATEWAY_PREFIX = new Uint8Array(varint.encode(0x0920))
+
+// Entries are IPNS records
+// https://github.com/multiformats/go-multicodec/blob/f57c73871939a0d533597e1dae416dae92533fb6/code_table.go#L435-L436
+const IPNS_RECORD_PREFIX = new Uint8Array(varint.encode(0x0300))
 
 // https://github.com/ipni/go-libipni/blob/afe2d8ea45b86c2a22f756ee521741c8f99675e5/ingest/schema/envelope.go#L20-L22
 const AD_SIG_CODEC = new TextEncoder().encode('/indexer/ingest/adSignature')
 
-enum EntryProtocol {
-  TrustlessGateway,
-  IPNS
-}
+const IPFS_CONTEXT = new TextEncoder().encode('/ipfs')
+const IPNS_CONTEXT = new TextEncoder().encode('/ipni/naam')
 
 interface Provider {
   peerId: string,
@@ -87,31 +92,19 @@ interface Provider {
 class Advertisement {
   constructor(
     public entryCid: CID,
-    public protocol: EntryProtocol,
+    public metadata: Uint8Array,
     public provider: Provider,
     public context: Uint8Array,
     public prevCid?: CID
   ) {}
-  getProtocolBytes(): Uint8Array {
-    switch (this.protocol) {
-      case EntryProtocol.TrustlessGateway:
-        return TRUSTLESS_GATEWAY_PREFIX
-      case EntryProtocol.IPNS:
-        return IPNS_PREFIX
-      default:
-        throw new Error('Invalid IPNI Entry protocol specified')
-    }
-  }
   async encodeAndSign() {
-    const metadata = this.getProtocolBytes()
-
     // Ugly data payload serialization - https://github.com/ipni/go-libipni/blob/afe2d8ea45b86c2a22f756ee521741c8f99675e5/ingest/schema/envelope.go#L84
     const serializedAd = new Uint8Array([
       ...this.prevCid?.bytes ?? new Uint8Array([]),
       ...this.entryCid.bytes,
       ...new TextEncoder().encode(this.provider.peerId),
       ...new TextEncoder().encode(this.provider.addresses.map(a => a.toString()).join('')),
-      ...metadata,
+      ...this.metadata,
       0 // IsRm field is always false
     ])
     const serializedAdDigest = (await sha256.digest(serializedAd)).bytes
@@ -132,7 +125,7 @@ class Advertisement {
       Addresses: this.provider.addresses,
       Entries: this.entryCid,
       ContextID: this.context,
-      Metadata: metadata,
+      Metadata: this.metadata,
       IsRm: false,
       Signature: signature
     }
@@ -158,9 +151,6 @@ export const generate = async () => {
 
   console.log(`🚀 Creating advertisement for ${cids.length} CIDs...`)
 
-  // Arbitrary handle, we don't expect to use it again
-  const context = new Uint8Array([0x98])
-
   await fs.mkdir(advertDir, { recursive: true });
 
   let entryChunk = new EntryChunk()
@@ -181,16 +171,50 @@ export const generate = async () => {
     `/dns6/${webHost}/tcp/443/https`
   ]
 
+  const provider = { peerId: peerId.toString(), privateKey: privKey, addresses }
+
   const signedAdBlock = await new Advertisement(
     entryBlock.cid,
-    EntryProtocol.TrustlessGateway,
-    { peerId: peerId.toString(), privateKey: privKey, addresses },
-    context
+    TRUSTLESS_GATEWAY_PREFIX,
+    provider,
+    IPFS_CONTEXT
   ).export()
 
-  const headCid = signedAdBlock.cid.toString()
-
   await writeBlock(signedAdBlock)
+
+  const ipnsValue = CID.parse((await fs.readFile(path.join(blocksDir, 'root'))).toString())
+  const ipnsLifetime = 60 * 60 * 1000 // 1 hour
+
+  console.log(`🔗 Creating IPNS record, valid for ${Math.floor(ipnsLifetime / 1000)} seconds`)
+
+  // Use the current time as a stateless counter
+  const ipnsSequence = Date.now()
+
+  const ipnsRecord = await createIPNSRecord(privKey, ipnsValue, ipnsSequence, ipnsLifetime)
+  const marshalledRecord = marshalIPNSRecord(ipnsRecord)
+
+  console.log(`🚀 Creating advertisement for IPNS record...`)
+
+  // Advertisement requires an empty set of entries
+  const ipnsEntryChunk = new EntryChunk()
+  const ipnsEntryBlock = await ipnsEntryChunk.export()
+  await writeBlock(ipnsEntryBlock)
+
+  const ipnsMetadata = new Uint8Array([
+    ...IPNS_RECORD_PREFIX,
+    ...marshalledRecord
+  ])
+
+  const signedIpnsAdBlock = await new Advertisement(
+    ipnsEntryBlock.cid,
+    ipnsMetadata,
+    provider,
+    IPNS_CONTEXT,
+    signedAdBlock.cid
+  ).export()
+
+  const headCid = signedIpnsAdBlock.cid.toString()
+  await writeBlock(signedIpnsAdBlock)
 
   await fs.writeFile(path.join(advertDir, 'head'), headCid)
 
