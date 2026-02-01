@@ -69,7 +69,7 @@
     position: relative;
     overflow: hidden;
     background: #d9dce1;
-    box-shadow: 4px 8px 60px #fff4, 0px 0px 12px #ddd4, 0 0 2px 1px rgba(23, 130, 166, 0.4);
+    box-shadow: 8px 20px 60px #fff4, 2px 5px 12px #fff2, 0 0 2px 1px rgba(23, 130, 166, 0.4);
     border-radius: 3rem;
     animation: 1s ease-in backwards card;
     &::after {
@@ -79,12 +79,14 @@
       width: 100%;
       height: 100%;
       border-radius: inherit;
-      box-shadow: 0 0 180px #0d1b1e96 inset, 0 0 24px #4442 inset;
+      box-shadow: 0 0 130px #0d1b1e30 inset, 0 0 24px #4442 inset;
+      background: #2221;
     }
     @media (prefers-color-scheme: light) {
       box-shadow: 0 0 4rem #2223, 0 0 1rem #3331, 0 0 1px 1px rgba(19, 43, 51, 0.1);
       &::after {
-        box-shadow: 0 0 120px #3d606830 inset, 0 0 24px #2221 inset;
+        box-shadow: 0 0 120px #3d606824 inset, 0 0 24px #8881 inset;
+        background: transparent;
       }
     }
     .wrapper {
@@ -115,7 +117,7 @@
           font-size: min(6vw, 3.25rem);
           font-family: sans-serif;
           font-weight: 600;
-          color: #444;
+          color: light-dark(#444, #333);
           -webkit-text-fill-color: unset;
           margin-top: 0;
           margin-bottom: .25em;
