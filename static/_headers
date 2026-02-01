@@ -15,11 +15,14 @@
   X-Content-Type-Options: nosniff
   Content-Location: /ipfs/:cid?format=raw
   Etag: ":cid"
+  Access-Control-Allow-Origin: *
 
 /routing/v1/providers/:cid
   Content-Type: application/json
   ! x-ipfs-path
+  Access-Control-Allow-Origin: *
 
 /ipni/v1/ad/:cid
   Content-Type: application/octet-stream
   ! x-ipfs-path
+  Access-Control-Allow-Origin: *
