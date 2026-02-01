@@ -3,20 +3,19 @@
   import { title } from '$lib/site.json';
 </script>
 
-<div class="logo">
-  <a href="/">
+<a href="/">
+  <div class="logo">
     <div class="image">
       <img alt src={logo} />
     </div>
     <p>{title}</p>
-  </a>
-</div>
+  </div>
+</a>
 
 <style>
   a {
     text-decoration: none;
     color: inherit;
-    display: contents;
   }
   .logo {
     display: flex;
@@ -24,6 +23,7 @@
     gap: 0.8rem;
     font-size: 1.1rem;
     font-weight: bold;
+    cursor: pointer;
   }
   img {
     display: block;
@@ -32,9 +32,11 @@
     height: 36px;
     transform: scale(260%);
     font-size: 0;
+    user-select: none;
+    pointer-events: none;
   }
   .image {
-    transition: transform .2s ease-out;
+    transition: transform .1s ease;
   }
   .logo:hover {
     text-decoration: underline;
