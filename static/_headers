@@ -1,6 +1,5 @@
 /*
   Cache-Control: public, max-age=300
-  x-ipfs-path: /ipns/kzwfwjn5ji4puu7gt0365ypbkdz3qew1om9jlby68tzevvrvq2kygmk12offskn
 
 /_app/immutable/*
   ! Cache-Control
