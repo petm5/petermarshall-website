@@ -70,7 +70,6 @@
     overflow: hidden;
     background: #d9dce1;
     box-shadow: 4px 8px 60px #fff4, 0px 0px 12px #ddd4, 0 0 2px 1px rgba(23, 130, 166, 0.4);
-    user-select: none;
     border-radius: 3rem;
     animation: 1s ease-in backwards card;
     &::after {
