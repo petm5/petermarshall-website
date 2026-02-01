@@ -5,7 +5,9 @@
 
 <div class="logo">
   <a href="/">
-    <img alt src={logo} />
+    <div class="image">
+      <img alt src={logo} />
+    </div>
     <p>{title}</p>
   </a>
 </div>
@@ -30,5 +32,11 @@
     height: 36px;
     transform: scale(260%);
     font-size: 0;
+  }
+  .image {
+    transition: transform .2s ease-out;
+  }
+  .logo:hover .image {
+    transform: rotate(30deg);
   }
 </style>
