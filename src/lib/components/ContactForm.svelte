@@ -59,7 +59,7 @@
     position: absolute;
     transform: translate(.5rem, -50%);
     padding: 0 .5rem;
-    background: #121117;
+    background: var(--bg-color);
     line-height: 1;
     color: inherit;
   }

@@ -57,7 +57,7 @@
   }
 
   .actions > * + * {
-    color: inherit;
+    color: #aab;
     background: #20252d;
   }
 </style>

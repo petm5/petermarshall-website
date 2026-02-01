@@ -36,9 +36,12 @@
     position: sticky;
     top: 0;
     z-index: 2;
-    color: #dee;
-    box-shadow: 0 0 4px #0006, 0 0 30px 0 #0002, 0 0 1px 1px #fff6;
-    background: #20263440;
+    color: light-dark(#333, #dee);
+    box-shadow: 0 0 16px #2222;
+    @media (prefers-color-scheme: dark) {
+      box-shadow: 0 0 4px #0006, 0 0 30px 0 #0002, 0 0 1px 1px #fff6;
+    }
+    background: light-dark(#999a, #20263440);
   }
   header::before {
     content: '';
@@ -48,6 +51,9 @@
     height: 250%;
     mask-image: linear-gradient(to bottom, black 0% 40%, transparent 40% 100%);
     backdrop-filter: contrast(0.9) brightness(0.8) saturate(1.5) blur(40px);
+    @media (prefers-color-scheme: light) {
+      backdrop-filter: contrast(0.6) brightness(1.5) saturate(1.5) blur(40px);
+    }
     filter: url('$lib/assets/glass-shader.svg#glass');
   }
   header::after {
@@ -65,7 +71,9 @@
     align-items: center;
     box-sizing: border-box;
     z-index: 1;
-    text-shadow: 0 0 3px #0008;
+    @media (prefers-color-scheme: dark) {
+      text-shadow: 0 0 3px #0008;
+    }
   }
   .menu-section {
     margin-left: auto;
@@ -143,9 +151,13 @@
       flex-direction: column;
       padding: 1.8rem 1.4rem;
       gap: 0.4rem;
-      background: #3334;
-      backdrop-filter: contrast(0.9) brightness(0.7) saturate(1.5) blur(40px);
-      box-shadow: 0px 0px 1.6rem #0004 inset, 0 1px 1px 0 #fff4;
+      background: light-dark(#dddd, #3334);
+      backdrop-filter: contrast(0.7) brightness(1.3) saturate(1.5) blur(40px);
+      box-shadow: 0 1.5rem 1.5rem -0.75rem #2222;
+      @media (prefers-color-scheme: dark) {
+        backdrop-filter: contrast(0.9) brightness(0.7) saturate(1.5) blur(40px);
+        box-shadow: 0px 0px 1.6rem #0004 inset, 0 1px 1px 0 #fff4;
+      }
     }
     nav, ul {
       display: contents;

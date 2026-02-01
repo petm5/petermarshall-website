@@ -7,10 +7,15 @@ html {
   scroll-behavior: smooth;
 }
 
+:root {
+  color-scheme: light dark;
+}
+
 body {
-  background-color: #131415;
-  color: #aab;
-  --faded-color: #889;
+  --bg-color: light-dark(#f1f4f6, #131415);
+  background-color: var(--bg-color);
+  color: light-dark(#333, #aab);
+  --faded-color: light-dark(#666, #889);
   --link-color: #9ac;
   font-family: Roboto,sans-serif;
   --layout-spacing: clamp(1rem, 6vw, 6rem);
@@ -74,10 +79,7 @@ main > *:first-child img {
 
 :is(h1, h2, h3) {
   line-height: 1.2;
-  background: linear-gradient(to right bottom, #fff 30%, #fff8 100%);
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: #fffe;
+  color: light-dark(#444, #fffe);
   scroll-margin-top: calc(var(--navbar-height) + 2rem);
 }
 
