@@ -37,7 +37,7 @@
     top: 0;
     z-index: 2;
     color: light-dark(#333, #dee);
-    box-shadow: 0 0 16px #2222;
+    box-shadow: 0 0 16px #2222, 0 0 3px #2224;
     background: light-dark(#999a, #20263440);
     &::before {
       content: '';
@@ -52,7 +52,7 @@
   }
   @media (prefers-color-scheme: dark) {
     header {
-      box-shadow: 0 0 4px #0006, 0 0 30px 0 #0002, 0 0 1px 1px #fff6;
+      box-shadow: 0 0 4px #0002, 0 0 30px 0 #0006, 0 0 1px 1px #fff6;
       &::before {
         backdrop-filter: contrast(0.9) brightness(0.8) saturate(1.5) blur(40px);
       }
