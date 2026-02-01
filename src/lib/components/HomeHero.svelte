@@ -51,7 +51,7 @@
   }
 
   .hero-section {
-    display: grid;
+    display: flex;
     place-content: center;
     grid-column: full;
     padding: 0 var(--side-spacing);
@@ -162,7 +162,7 @@
             font-size: clamp(.8rem, 4vw, 1rem);
             max-width: 30rem;
             & h1 {
-              font-size: min(10vw, 4rem);
+              font-size: min(10vw, 3.125rem);
             }
           }
           :global(.actions) {
