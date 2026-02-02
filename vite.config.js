@@ -18,5 +18,8 @@ export default defineConfig({
 	],
 	build: {
 		assetsInlineLimit: 0
+	},
+	define: {
+		BUILD_DATE: Date.now()
 	}
 });
