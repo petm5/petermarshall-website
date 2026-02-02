@@ -6,7 +6,7 @@
   import { page } from '$app/state';
   import { dev } from '$app/environment';
 	import { baseUrl } from '$lib/site.json';
-	const ipnsDomain = baseUrl.replaceAll('.', '-');
+	const ipnsDomain = baseUrl.split('//')[1].replaceAll('.', '-');
 
   let loaded = $state(false);
   let archived = $state(false);
