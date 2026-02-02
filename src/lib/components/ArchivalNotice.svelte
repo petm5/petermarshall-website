@@ -25,7 +25,7 @@
   }
 
   const updateMessage = () => {
-    if (window.location.host !== baseUrl
+    if (window.location.origin !== baseUrl
     && !window.location.host.startsWith(`${baseUrl.replaceAll('.', '-')}.ipns.`)) {
       archived = true;
       const ipfsGateway = findGateway();
