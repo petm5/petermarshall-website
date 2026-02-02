@@ -6,6 +6,8 @@
   import { page } from '$app/state';
   import { dev } from '$app/environment';
 	import { baseUrl } from '$lib/site.json';
+	const ipnsDomain = baseUrl.replaceAll('.', '-');
+
   let loaded = $state(false);
   let archived = $state(false);
   let latestLink: string = $state('');
@@ -26,11 +28,11 @@
 
   const updateMessage = () => {
     if (window.location.origin !== baseUrl
-    && !window.location.host.startsWith(`${baseUrl.replaceAll('.', '-')}.ipns.`)) {
+    && !window.location.host.includes(`.ipns.`)) {
       archived = true;
       const ipfsGateway = findGateway();
       if (ipfsGateway) {
-        latestLink = `${window.location.protocol}//${ipfsGateway}${page.url.pathname}`
+        latestLink = `${window.location.protocol}//${ipnsDomain}.ipns.${ipfsGateway}${page.url.pathname}`
       } else {
         latestLink = `${baseUrl}${page.url.pathname}`
       }
