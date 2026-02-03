@@ -5,7 +5,7 @@
 
 <h1>Contact Me</h1>
 
-<p><enhanced:img src={HeaderImage} sizes="min(48rem, 100vw)" /></p>
+<p><enhanced:img src={HeaderImage} alt="A narrow pathway in the hills, stretching toward the horizon." sizes="min(48rem, 100vw)" /></p>
 
 <p>For further inquiries, or to get in touch with me, please fill out the form below.</p>
 

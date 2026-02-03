@@ -4,7 +4,7 @@
 
 # About Me
 
-<p><enhanced:img src={HeaderImage} sizes="min(48rem, 100vw)" /></p>
+<p><enhanced:img src={HeaderImage} alt="Aerial view of Kanata Technology Park" sizes="min(48rem, 100vw)" /></p>
 
 ## Vision
 

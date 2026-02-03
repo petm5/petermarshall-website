@@ -3,5 +3,5 @@
 </script>
 
 <p>
-  <enhanced:img src={Image} sizes="min(48rem, 100vw)" />
+  <enhanced:img alt="A darkened scene featuring an IDE on a MacBook Pro, representing web development." src={Image} sizes="min(48rem, 100vw)" />
 </p>
