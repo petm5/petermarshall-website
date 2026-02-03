@@ -58,8 +58,9 @@ export class SpringSimulation {
     this.velocityX += accelX * deltaTime;
     this.velocityY += accelY * deltaTime;
 
+    const accelerationMagnitude = Math.hypot(accelX, accelY);
     const velocityMagnitude = Math.hypot(this.velocityX, this.velocityY);
-    if (velocityMagnitude < 0.1) {
+    if (velocityMagnitude + accelerationMagnitude < 0.001) {
       // Prevent micro-jitters
       this.velocityX = 0;
       this.velocityY = 0;
