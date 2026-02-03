@@ -68,6 +68,11 @@
   const onMouseMove = (e: MouseEvent) => {
     if (!checkFollowers()) return;
 
+    if (!matchMedia('(pointer:fine)').matches) {
+      if (!hidden) hideFollowers();
+      return;
+    }
+
     const { clientX, clientY } = e;
 
     if (hidden) {
@@ -145,8 +150,10 @@
 {/if}
 
 <style>
-  :global(body, a, input, textarea, button) {
-    cursor: none;
+  @media (pointer: fine) {
+    :global(body, a, input, textarea, button) {
+      cursor: none;
+    }
   }
 
   @property --scale {
