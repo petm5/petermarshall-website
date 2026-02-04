@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { SpringSimulation } from '$lib/utils/spring-physics';
-  import { beforeNavigate } from '$app/navigation';
+  import { afterNavigate } from '$app/navigation';
 
   let loaded = false;
 
@@ -111,6 +111,8 @@
   }
 
   const grow = () => {
+    if (!checkFollowers()) return;
+
     mainFollower.animate({
       "--scale": '3.5'
     }, {duration: 100, fill: "forwards"})
@@ -120,6 +122,8 @@
   }
 
   const shrink = () => {
+    if (!checkFollowers()) return;
+
     mainFollower.animate({
       "--scale": '1'
     }, {duration: 100, fill: "forwards"})
@@ -129,18 +133,14 @@
   }
 
   const onMouseOver = (e: MouseEvent) => {
-    if (!checkFollowers()) return;
-
     if (isInteractable(e.target)) grow();
   }
 
   const onMouseOut = (e: MouseEvent) => {
-    if (!checkFollowers()) return;
-
     if (isInteractable(e.target)) shrink();
   }
 
-  beforeNavigate(shrink);
+  afterNavigate(shrink);
 
   onMount(() => {
     window.addEventListener('mousemove', onMouseMove);
