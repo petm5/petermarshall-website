@@ -16,6 +16,10 @@ export class SpringSimulation {
   reset(x: number, y: number) {
     this.currentX = x;
     this.currentY = y;
+    this.prevTargetX = x;
+    this.prevTargetY = y;
+    this.velocityX = 0;
+    this.velocityY = 0;
     this.lastTime = performance.now();
   }
 
