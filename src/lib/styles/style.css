@@ -27,7 +27,7 @@
 }
 
 body {
-  --bg-color: light-dark(#f1f4f6, #131415);
+  --bg-color: light-dark(#f1f4f6, #080909);
   background-color: var(--bg-color);
   color: light-dark(#333, #aab);
   --faded-color: light-dark(#666, #889);

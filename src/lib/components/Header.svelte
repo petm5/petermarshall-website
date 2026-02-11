@@ -38,32 +38,12 @@
     z-index: 2;
     color: light-dark(#333, #dee);
     box-shadow: 0 0 16px #2222, 0 0 3px #2224;
-    background: light-dark(#eeed, #20263440);
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      height: 250%;
-      mask-image: linear-gradient(to bottom, black 0% 40%, transparent 40% 100%);
-      backdrop-filter: contrast(0.6) brightness(2) saturate(1.5) blur(40px);
-      filter: url('$lib/assets/glass-shader.svg#glass');
-      pointer-events: none;
-    }
+    background: light-dark(#eee, #101217);
   }
   @media (prefers-color-scheme: dark) {
     header {
-      box-shadow: 0 0 4px #0002, 0 0 30px 0 #0006, 0 0 1px 1px #fff6;
-      &::before {
-        backdrop-filter: contrast(0.9) brightness(0.8) saturate(1.5) blur(40px);
-      }
+      box-shadow: 0 0 4px #0002, 0 0 30px 0 #0006, 0 0 0 1px #333;
     }
-  }
-  header::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    box-shadow: inset 2px 2px 30px -7px rgba(255, 255, 255, 0.1);
   }
   .content {
     max-width: 80rem;
