@@ -17,6 +17,7 @@
 	"devDependencies": {
 		"@chainsafe/libp2p-noise": "^17.0.0",
 		"@chainsafe/libp2p-yamux": "^8.0.1",
+		"@cloudflare/workers-types": "^4.20260214.0",
 		"@libp2p/bootstrap": "^12.0.11",
 		"@libp2p/crypto": "^5.1.13",
 		"@libp2p/identify": "^4.0.10",
@@ -31,6 +32,7 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@types/node": "^25.2.0",
 		"blockstore-core": "^6.1.2",
+		"esbuild": "^0.27.3",
 		"glob": "^13.0.0",
 		"ipfs-unixfs-importer": "^16.0.2",
 		"ipns": "^10.1.3",

@@ -1,6 +1,17 @@
 {
   "name": "petermarshall-ca",
   "compatibility_date": "2025-05-23",
+  "env": {
+    "ipfs": {
+      "name": "ipfs",
+      "main": "dist/ipfs-worker.js",
+      "triggers": {
+        "crons": [
+          "30 1 * * *" // 1:30 AM (UTC), every day
+        ]
+      }
+    }
+  },
   "assets": {
     "directory": "build",
   }
