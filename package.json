@@ -10,7 +10,8 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"build-ipfs": "node scripts/generate-ipfs.js",
 		"build-ipni": "node --import=tsx scripts/generate-ipni.ts",
-		"build-all": "vite build && node scripts/generate-ipfs.js && node --import=tsx scripts/generate-ipni.ts",
+		"build-ipfs-worker": "node --import=tsx scripts/build-ipfs-worker.ts",
+		"build-all": "vite build && node scripts/generate-ipfs.js && node --import=tsx scripts/generate-ipni.ts && node --import=tsx scripts/build-ipfs-worker.ts",
 		"dht-provide": "node --import=tsx scripts/publish-ipfs.ts",
 		"ipni-provide": "node --import=tsx scripts/provide-ipni.ts"
 	},
