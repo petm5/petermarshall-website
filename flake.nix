@@ -15,6 +15,7 @@
           default = petermarshall-ca;
         };
         devShells.default = import ./shell.nix { inherit pkgs; };
+        devShells.wrangler = import ./shell.nix { inherit pkgs; withWrangler = true; };
       }
     );
 }
