@@ -17,10 +17,10 @@ const advertDir = path.join(distDir, 'ipni', 'v1', 'ad')
 const indexerHost = new URL('https://cid.contact')
 const delegatedRouterHost = new URL('https://delegated-ipfs.dev')
 
-const advertCid = CID.parse(await fs.readFile(path.join(advertDir, 'head'), { encoding: 'utf8' }))
-const peerId = peerIdFromString(await fs.readFile(path.join(advertDir, 'id'), { encoding: 'utf8' }))
+const advertCid = CID.parse(await fs.readFile(path.join(advertDir, '_ad'), { encoding: 'utf8' }))
+const peerId = peerIdFromString(await fs.readFile(path.join(advertDir, '_id'), { encoding: 'utf8' }))
 
-const ipnsData = (await fs.readFile(path.join(advertDir, 'ipns'))).buffer
+const ipnsData = (await fs.readFile(path.join(advertDir, '_ipns'))).buffer
 
 const ipniAnnouncement = createIpniAnnouncement({ advertCid, peerId, webHost })
 
