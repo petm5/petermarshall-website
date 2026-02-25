@@ -12,8 +12,8 @@ import site from '../src/lib/site.json' with { type: 'json' };
 const distDir = path.resolve('build')
 const advertDir = path.join(distDir, 'ipni', 'v1', 'ad')
 
-const advertCid = CID.parse(await fs.readFile(path.join(advertDir, 'head'), { encoding: 'utf8' }))
-const peerId = peerIdFromString(await fs.readFile(path.join(advertDir, 'id'), { encoding: 'utf8' }))
+const advertCid = CID.parse(await fs.readFile(path.join(advertDir, '_ad'), { encoding: 'utf8' }))
+const peerId = peerIdFromString(await fs.readFile(path.join(advertDir, '_id'), { encoding: 'utf8' }))
 
 const webHost = new URL(site.baseUrl)
 

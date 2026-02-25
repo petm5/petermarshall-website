@@ -10,7 +10,7 @@ import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 
 import { createIPNSRecord, marshalIPNSRecord } from 'ipns'
 
-import { Advertisement, EntryChunk, Provider, Protocol, CHUNK_THRESHOLD } from 'js-ipni'
+import { Advertisement, AdvertisementHead, EntryChunk, Provider, Protocol, CHUNK_THRESHOLD } from 'js-ipni'
 
 import site from '../src/lib/site.json' with { type: 'json' }
 
@@ -124,17 +124,24 @@ export const generate = async () => {
     prevCid: signedAdBlock.cid
   }).export()
 
-  const headCid = signedIpnsAdBlock.cid.toString()
+  const adCid = signedIpnsAdBlock.cid.toString()
   await writeBlock(signedIpnsAdBlock)
 
-  await fs.writeFile(path.join(advertDir, 'head'), headCid)
+  const signedHeadBlock = await new AdvertisementHead({
+    headCid: signedIpnsAdBlock.cid,
+    privateKey: privKey
+  }).export()
 
-  await fs.writeFile(path.join(advertDir, 'id'), peerId.toString())
+  await fs.writeFile(path.join(advertDir, 'head'), signedHeadBlock.bytes)
 
-  await fs.writeFile(path.join(advertDir, 'ipns'), marshalledRecord)
+  await fs.writeFile(path.join(advertDir, '_ad'), adCid)
+
+  await fs.writeFile(path.join(advertDir, '_id'), peerId.toString())
+
+  await fs.writeFile(path.join(advertDir, '_ipns'), marshalledRecord)
 
   console.log(`\n✅ Done!`);
-  console.log(`🌐 Advertisement CID: ${headCid}`);
+  console.log(`🌐 Advertisement CID: ${adCid}`);
   console.log(`🌐 IPNS name: /ipns/${privKey.publicKey.toCID().toV1().toString(base36)}`);
 }
 
