@@ -8,14 +8,37 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system}; in
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        inherit (pkgs) lib;
+
+        devServer = pkgs.writeShellApplication {
+          name = "dev-server";
+          runtimeInputs = with pkgs; [ nodejs ];
+          text = ''
+            npm run dev
+          '';
+        };
+      in
       {
         packages = rec {
           petermarshall-ca = pkgs.callPackage ./package.nix {};
           default = petermarshall-ca;
         };
-        devShells.default = import ./shell.nix { inherit pkgs; };
-        devShells.wrangler = import ./shell.nix { inherit pkgs; withWrangler = true; };
+        apps = rec {
+          dev-server = {
+            type = "app";
+            program = lib.getExe devServer;
+          };
+          default = dev-server;
+        };
+        devShells.default = pkgs.mkShellNoCC {
+          inputsFrom = [ devServer ];
+        };
+        devShells.wrangler = pkgs.mkShellNoCC {
+          packages = with pkgs; [ wrangler ];
+          inputsFrom = [ devServer ];
+        };
       }
     );
 }
