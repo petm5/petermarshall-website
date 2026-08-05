@@ -8,14 +8,24 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system}; in
-      {
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        inherit (pkgs) lib;
+      in
+      rec {
         packages = rec {
           petermarshall-ca = pkgs.callPackage ./package.nix {};
           default = petermarshall-ca;
         };
-        devShells.default = import ./shell.nix { inherit pkgs; };
-        devShells.wrangler = import ./shell.nix { inherit pkgs; withWrangler = true; };
+        devShells = {
+          default = pkgs.mkShellNoCC {
+            inputsFrom = [ packages.petermarshall-ca ];
+          };
+          wrangler = pkgs.mkShellNoCC {
+            packages = with pkgs; [ wrangler ];
+            inputsFrom = [ packages.petermarshall-ca ];
+          };
+        };
       }
     );
 }
