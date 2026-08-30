@@ -3,3 +3,6 @@ packages: []
 allowBuilds:
   esbuild: true
   sharp: true
+
+minimumReleaseAgeExclude:
+  - js-ipni@0.0.2

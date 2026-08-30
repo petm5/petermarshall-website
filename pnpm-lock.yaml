@@ -66,8 +66,8 @@ importers:
         specifier: ^10.1.3
         version: 10.1.6
       js-ipni:
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.2
+        version: 0.0.2
       mdsvex:
         specifier: ^0.12.6
         version: 0.12.8(svelte@5.56.8)
@@ -655,6 +655,9 @@ packages:
   '@ipld/dag-cbor@9.2.7':
     resolution: {integrity: sha512-ZmfXmElRWATr+hoUTSAOr6HUcjVhOcNHDqgczc76qte2DHHFEK0ZhNzUcdTDQhF/VSIvf2ioaRTRLWwLc83sNw==}
 
+  '@ipld/dag-json@10.2.9':
+    resolution: {integrity: sha512-opNPQQsTuCFZkaJCAqXrB/n9OqUD6W2Boz/Au5HjhLQyczmT8lxoOZObqQ5S5hhnV8p6sgKAimNhUB2W6y0Mzg==}
+
   '@ipld/dag-pb@4.1.7':
     resolution: {integrity: sha512-/i/13trFihjWfDyXlylRwhuYjtzYjvOFw0vlRjYGnZuv7d7MOgA2lV/vRuL5RfeUajM03aZfFLdq4S7cTbbTRg==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
@@ -1197,8 +1200,8 @@ packages:
   it-queueless-pushable@2.0.5:
     resolution: {integrity: sha512-BaKqGLL1AQMR1AEaxiM09vzJQVXHHhfhh9UV0qPqORw/8Rm8igDQqT1qHregfHIb1NIW9jxQ/aXBibHJyuivuQ==}
 
-  js-ipni@0.0.1:
-    resolution: {integrity: sha512-VrL46v9BLAJKMGL2gHr3W7EwKg4w7w2aByu16YMX2OBQXH2u5LfwIe7AOqKxM8r786wrBWypwaeOpbmS5nzE+g==}
+  js-ipni@0.0.2:
+    resolution: {integrity: sha512-+dba4lYtFx9uQiVt+YTZKBaQLKsv913LlCPg4/Sq5g6IZ1hCjvMsWBe/EISeCYCDtG9sb9LRcyuYOwaFA3Lz2g==}
 
   kleur@4.1.5:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
@@ -2067,6 +2070,11 @@ snapshots:
       cborg: 5.1.11
       multiformats: 13.4.2
 
+  '@ipld/dag-json@10.2.9':
+    dependencies:
+      cborg: 5.1.11
+      multiformats: 13.4.2
+
   '@ipld/dag-pb@4.1.7':
     dependencies:
       multiformats: 14.0.5
@@ -2689,9 +2697,10 @@ snapshots:
       p-defer: 4.0.1
       race-signal: 2.0.0
 
-  js-ipni@0.0.1:
+  js-ipni@0.0.2:
     dependencies:
       '@ipld/dag-cbor': 9.2.7
+      '@ipld/dag-json': 10.2.9
       '@libp2p/interface': 3.2.5
       '@libp2p/peer-id': 6.0.14
       '@libp2p/peer-record': 9.0.15
