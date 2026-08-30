@@ -11,33 +11,20 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         inherit (pkgs) lib;
-
-        devServer = pkgs.writeShellApplication {
-          name = "dev-server";
-          runtimeInputs = with pkgs; [ nodejs ];
-          text = ''
-            npm run dev
-          '';
-        };
       in
-      {
+      rec {
         packages = rec {
           petermarshall-ca = pkgs.callPackage ./package.nix {};
           default = petermarshall-ca;
         };
-        apps = rec {
-          dev-server = {
-            type = "app";
-            program = lib.getExe devServer;
+        devShells = {
+          default = pkgs.mkShellNoCC {
+            inputsFrom = [ packages.petermarshall-ca ];
           };
-          default = dev-server;
-        };
-        devShells.default = pkgs.mkShellNoCC {
-          inputsFrom = [ devServer ];
-        };
-        devShells.wrangler = pkgs.mkShellNoCC {
-          packages = with pkgs; [ wrangler ];
-          inputsFrom = [ devServer ];
+          wrangler = pkgs.mkShellNoCC {
+            packages = with pkgs; [ wrangler ];
+            inputsFrom = [ packages.petermarshall-ca ];
+          };
         };
       }
     );
