@@ -17,6 +17,9 @@ const advertCid = CID.parse(await fs.readFile(path.join(advertDir, '_ad'), { enc
 const peerId = peerIdFromString(await fs.readFile(path.join(advertDir, '_id'), { encoding: 'utf8' }))
 const rootCid = CID.parse(await fs.readFile(path.join(ipfsDir, 'root'), { encoding: 'utf8' }))
 
+const b64Key = process.env.IPFS_PRIVATE_KEY
+if (!b64Key) throw new Error('Required variable IPFS_PRIVATE_KEY is missing')
+
 const webHost = new URL(site.baseUrl)
 
 const indexerHost = new URL('https://cid.contact')
@@ -39,6 +42,7 @@ async function build() {
       IPNI_ANNOUNCEMENT: JSON.stringify(ipniAnnouncement),
       INDEXER_HOST: JSON.stringify(indexerHost.toString()),
       ROOT_CID: JSON.stringify(rootCid.toString()),
+      IPFS_PRIVATE_KEY: JSON.stringify(b64Key),
     }
   })
   console.log('⚡ Worker bundled successfully!');

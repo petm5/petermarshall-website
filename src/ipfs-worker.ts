@@ -12,6 +12,7 @@ import site from './lib/site.json' with { type: 'json' }
 declare const IPNI_ANNOUNCEMENT: string
 declare const INDEXER_HOST: string
 declare const ROOT_CID: string
+declare const IPFS_PRIVATE_KEY: string
 
 const ipniAnnouncement = IPNI_ANNOUNCEMENT as unknown as IpniAnnouncement
 const indexerHost = new URL(INDEXER_HOST)
@@ -36,10 +37,10 @@ export class DhtPublisher extends DurableObject {
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env)
 
-    const b64Key = env.IPFS_PRIVATE_KEY
+    const b64Key = IPFS_PRIVATE_KEY
     if (!b64Key) throw new Error('IPFS_PRIVATE_KEY is missing from environment')
 
-    const privKey = privateKeyFromRaw(Buffer.from(b64Key, 'base64'))
+    const privKey = privateKeyFromRaw(Uint8Array.fromBase64(b64Key))
 
     this.peerId = peerIdFromPrivateKey(privKey)
   }
