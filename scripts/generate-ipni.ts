@@ -5,7 +5,7 @@ import { CID } from 'multiformats'
 import { base36 } from 'multiformats/bases/base36'
 
 import type { BlockView } from 'multiformats/block/interface'
-import { privateKeyFromRaw, generateKeyPair } from '@libp2p/crypto/keys'
+import { privateKeyFromProtobuf, generateKeyPair } from '@libp2p/crypto/keys'
 import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 
 import { Advertisement, AdvertisementHead, EntryChunk, Provider, Protocol, CHUNK_THRESHOLD } from 'js-ipni'
@@ -22,7 +22,7 @@ const loadKey = async () => {
   const b64Key = process.env.IPFS_PRIVATE_KEY
 
   if (b64Key) {
-    return privateKeyFromRaw(Buffer.from(b64Key, 'base64'))
+    return privateKeyFromProtobuf(Buffer.from(b64Key, 'base64'))
   } else {
     console.warn('⚠️ WARNING: Using random keypair. This is probably not what you want.')
     return await generateKeyPair('Ed25519')
