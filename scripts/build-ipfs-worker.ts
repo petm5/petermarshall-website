@@ -38,7 +38,7 @@ async function build() {
     define: {
       IPNI_ANNOUNCEMENT: JSON.stringify(ipniAnnouncement),
       INDEXER_HOST: JSON.stringify(indexerHost.toString()),
-      ROOT_CID: rootCid.toString(),
+      ROOT_CID: JSON.stringify(rootCid.toString()),
     }
   })
   console.log('⚡ Worker bundled successfully!');
