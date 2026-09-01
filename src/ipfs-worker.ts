@@ -4,7 +4,7 @@ import { sendIpniAnnouncement, type IpniAnnouncement } from '../src/lib/ipfs/ipn
 import { IpfsProvider } from '../src/lib/ipfs/amino-provider'
 import { CID } from 'multiformats/cid'
 import type { PeerId } from "@libp2p/interface";
-import { privateKeyFromRaw } from '@libp2p/crypto/keys'
+import { privateKeyFromProtobuf } from '@libp2p/crypto/keys'
 import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 
 import site from './lib/site.json' with { type: 'json' }
@@ -40,7 +40,7 @@ export class DhtPublisher extends DurableObject {
     const b64Key = IPFS_PRIVATE_KEY
     if (!b64Key) throw new Error('IPFS_PRIVATE_KEY is missing from environment')
 
-    const privKey = privateKeyFromRaw(Uint8Array.fromBase64(b64Key))
+    const privKey = privateKeyFromProtobuf(Uint8Array.fromBase64(b64Key))
 
     this.peerId = peerIdFromPrivateKey(privKey)
   }

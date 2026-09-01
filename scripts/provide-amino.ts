@@ -1,6 +1,6 @@
 import { IpfsProvider } from '../src/lib/ipfs/amino-provider.ts'
 import { CID } from 'multiformats/cid'
-import { privateKeyFromRaw } from '@libp2p/crypto/keys'
+import { privateKeyFromProtobuf } from '@libp2p/crypto/keys'
 import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 import fs from 'fs/promises'
 import path from 'path'
@@ -22,7 +22,7 @@ const rootCid = CID.parse(await fs.readFile(path.join(blocksDir, 'root'), { enco
 const b64Key = process.env.IPFS_PRIVATE_KEY
 if (!b64Key) throw new Error('Required variable IPFS_PRIVATE_KEY is missing')
 
-const privKey = privateKeyFromRaw(Buffer.from(b64Key, 'base64'))
+const privKey = privateKeyFromProtobuf(Buffer.from(b64Key, 'base64'))
 
 const peerId = peerIdFromPrivateKey(privKey)
 
