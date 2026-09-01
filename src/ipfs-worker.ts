@@ -1,22 +1,78 @@
-import type { ScheduledController, ExecutionContext } from '@cloudflare/workers-types'
+import { DurableObject } from "cloudflare:workers";
 
 import { sendIpniAnnouncement, type IpniAnnouncement } from '../src/lib/ipfs/ipni-announcement-sender'
+import { IpfsProvider } from '../src/lib/ipfs/amino-provider'
+import { CID } from 'multiformats/cid'
+import type { PeerId } from "@libp2p/interface";
+import { privateKeyFromRaw } from '@libp2p/crypto/keys'
+import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 
-declare const IPNI_ANNOUNCEMENT: IpniAnnouncement
+import site from './lib/site.json' with { type: 'json' }
+
+declare const IPNI_ANNOUNCEMENT: string
 declare const INDEXER_HOST: string
+declare const ROOT_CID: string
 
-const ipniAnnouncement = IPNI_ANNOUNCEMENT
+const ipniAnnouncement = IPNI_ANNOUNCEMENT as unknown as IpniAnnouncement
 const indexerHost = new URL(INDEXER_HOST)
+const rootCid = CID.parse(ROOT_CID)
 
-interface Env {}
+const webHost = new URL(site.baseUrl).host
+
+const addresses = [
+  `/dns4/${webHost}/tcp/443/https`,
+  `/dns6/${webHost}/tcp/443/https`
+]
+
+export interface Env {
+  DHT_PUBLISHER: DurableObjectNamespace<DhtPublisher>
+  IPFS_PRIVATE_KEY: string
+}
+
+export class DhtPublisher extends DurableObject {
+  private cachedPeers: string[]
+  private peerId: PeerId
+
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env)
+
+    const b64Key = env.IPFS_PRIVATE_KEY
+    if (!b64Key) throw new Error('IPFS_PRIVATE_KEY is missing from environment')
+
+    const privKey = privateKeyFromRaw(Buffer.from(b64Key, 'base64'))
+
+    this.peerId = peerIdFromPrivateKey(privKey)
+  }
+
+  async publish(): Promise<void> {
+    if (!this.cachedPeers) {
+      this.cachedPeers = (await this.ctx.storage.get<string[]>('cached_peers')) || []
+    }
+
+    const activePeers = await IpfsProvider.provide({
+      cids: [rootCid],
+      addresses,
+      peerId: this.peerId,
+      peers: this.cachedPeers,
+    })
+
+    await this.ctx.storage.put('cached_peers', activePeers)
+  }
+}
 
 export default {
   async scheduled(
     _controller: ScheduledController,
-    _env: Env,
+    env: Env,
     ctx: ExecutionContext
   ) {
     console.log('Running scheduled IPNI refresh\n')
     ctx.waitUntil(sendIpniAnnouncement(ipniAnnouncement, indexerHost))
+
+    const id = env.DHT_PUBLISHER.idFromName('global-dht-publisher')
+    const stub = env.DHT_PUBLISHER.get(id)
+
+    console.log('Running scheduled DHT reprovide')
+    ctx.waitUntil(stub.publish())
   },
 }

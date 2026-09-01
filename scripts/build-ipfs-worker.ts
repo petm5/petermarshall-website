@@ -10,10 +10,12 @@ import { createIpniAnnouncement } from '../src/lib/ipfs/ipni-announcement'
 import site from '../src/lib/site.json' with { type: 'json' };
 
 const distDir = path.resolve('build')
+const ipfsDir = path.join(distDir, 'ipfs')
 const advertDir = path.join(distDir, 'ipni', 'v1', 'ad')
 
 const advertCid = CID.parse(await fs.readFile(path.join(advertDir, '_ad'), { encoding: 'utf8' }))
 const peerId = peerIdFromString(await fs.readFile(path.join(advertDir, '_id'), { encoding: 'utf8' }))
+const rootCid = CID.parse(await fs.readFile(path.join(ipfsDir, 'root'), { encoding: 'utf8' }))
 
 const webHost = new URL(site.baseUrl)
 
@@ -32,9 +34,11 @@ async function build() {
     target: 'esnext',
     minify: true,
     treeShaking: true,
+    external: ['cloudflare:workers'],
     define: {
       IPNI_ANNOUNCEMENT: JSON.stringify(ipniAnnouncement),
-      INDEXER_HOST: JSON.stringify(indexerHost.toString())
+      INDEXER_HOST: JSON.stringify(indexerHost.toString()),
+      ROOT_CID: rootCid.toString(),
     }
   })
   console.log('⚡ Worker bundled successfully!');
