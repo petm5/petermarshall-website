@@ -14,6 +14,7 @@
         devPackages = with pkgs; [
           nodejs
           pnpm
+          typescript
         ];
       in
       {
@@ -24,6 +25,7 @@
           wrangler = pkgs.mkShellNoCC {
             packages = (with pkgs; [
               wrangler
+              cloudflared
             ]) ++ devPackages;
           };
         };
