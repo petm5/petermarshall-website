@@ -75,7 +75,7 @@ export class IpfsProvider {
         await node.contentRouting.provide(cid)
       }
 
-      activePeers = node.getPeers().map((p) => p.toString())
+      activePeers = node.getConnections().map((p) => p.remoteAddr.toString()).slice(0,8)
     } finally {
       await node.stop()
     }
