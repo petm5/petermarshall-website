@@ -4,7 +4,7 @@
   "main": "dist/ipfs-worker.js",
   "triggers": {
     "crons": [
-      "30 1 * * *" // 1:30 AM (UTC), every day
+      "30 1,13 * * *" // 1:30 AM and 1:30 PM (UTC), every day
     ]
   },
   "durable_objects": {
