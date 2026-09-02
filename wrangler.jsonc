@@ -15,6 +15,12 @@
       }
     ]
   },
+  "exports": {
+    "DhtPublisher": {
+      "type": "durable-object",
+      "storage": "sqlite",
+    },
+  },
   "assets": {
     "directory": "build",
     "not_found_handling": "404-page",
