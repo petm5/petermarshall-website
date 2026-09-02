@@ -1,6 +1,6 @@
 {
   "name": "petermarshall-ca",
-  "compatibility_date": "2025-05-23",
+  "compatibility_date": "2026-09-01",
   "main": "dist/ipfs-worker.js",
   "triggers": {
     "crons": [
