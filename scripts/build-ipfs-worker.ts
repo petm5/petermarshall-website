@@ -37,6 +37,7 @@ async function build() {
     target: 'esnext',
     minify: true,
     treeShaking: true,
+    sourcemap: 'inline',
     external: ['cloudflare:workers'],
     define: {
       IPNI_ANNOUNCEMENT: JSON.stringify(ipniAnnouncement),
