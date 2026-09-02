@@ -1,4 +1,16 @@
-import { DurableObject } from "cloudflare:workers";
+// Cloudflare's runtime does not implement WS backpressure
+Object.defineProperty(WebSocket.prototype, 'bufferedAmount', {
+  get() {
+    return 0;
+  },
+  configurable: true,
+  enumerable: true,
+});
+
+import { DurableObject } from "cloudflare:workers"
+
+// It does not implement BroadcastChannel either
+import 'broadcastchannel-polyfill'
 
 import { sendIpniAnnouncement, type IpniAnnouncement } from '../src/lib/ipfs/ipni-announcement-sender'
 import { IpfsProvider } from '../src/lib/ipfs/amino-provider'

@@ -40,6 +40,7 @@
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@types/node": "^25.2.0",
 		"blockstore-core": "^7.0.1",
+		"broadcastchannel-polyfill": "^1.0.1",
 		"cloudflare": "^5.2.0",
 		"esbuild": "^0.27.3",
 		"glob": "^13.0.0",
