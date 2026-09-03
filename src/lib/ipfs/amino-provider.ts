@@ -76,6 +76,8 @@ export class IpfsProvider {
       }
 
       activePeers = node.getConnections().map((p) => p.remoteAddr.toString()).slice(0,8)
+    } catch (err) {
+      throw err
     } finally {
       await node.stop()
     }
