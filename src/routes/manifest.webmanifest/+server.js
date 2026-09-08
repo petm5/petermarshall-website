@@ -1,9 +1,9 @@
 import { title, tagline } from '$lib/site.json'
 
-import icon_192 from '$lib/assets/app-icon.png?w=192&format=avif&quality=90'
-import icon_512 from '$lib/assets/app-icon.png?w=512&format=avif&quality=90'
-import icon_maskable_192 from '$lib/assets/app-icon-maskable.png?w=192&format=avif&quality=90'
-import icon_maskable_512 from '$lib/assets/app-icon-maskable.png?w=512&format=avif&quality=90'
+import icon_192 from '$lib/assets/app-icon.png?w=192&format=webp&quality=90'
+import icon_512 from '$lib/assets/app-icon.png?w=512&format=webp&quality=90'
+import icon_maskable_192 from '$lib/assets/app-icon-maskable.png?w=192&format=webp&quality=90'
+import icon_maskable_512 from '$lib/assets/app-icon-maskable.png?w=512&format=webp&quality=90'
 
 export const prerender = true
 
@@ -27,25 +27,25 @@ const manifest = {
       src: icon_192,
       purpose: "any",
       sizes: "192x192",
-      type: "image/avif"
+      type: "image/webp"
     },
     {
       src: icon_512,
       purpose: "any",
       sizes: "512x512",
-      type: "image/avif"
+      type: "image/webp"
     },
     {
       src: icon_maskable_192,
       purpose: "maskable",
       sizes: "192x192",
-      type: "image/avif"
+      type: "image/webp"
     },
     {
       src: icon_maskable_512,
       purpose: "maskable",
       sizes: "512x512",
-      type: "image/avif"
+      type: "image/webp"
     }
   ],
   display: "minimal-ui"
