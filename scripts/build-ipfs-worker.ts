@@ -5,7 +5,7 @@ import path from 'node:path'
 import { CID } from 'multiformats/cid'
 import { peerIdFromString } from '@libp2p/peer-id'
 
-import { createIpniAnnouncement } from '../src/lib/ipfs/ipni-announcement'
+import { createIpniAnnouncement } from '../src/lib/ipfs/ipni-announcement.ts'
 
 import site from '../src/lib/site.json' with { type: 'json' };
 
