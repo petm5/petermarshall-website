@@ -21,6 +21,7 @@ export const GET = async () => {
 const manifest = {
   name: title,
   description: tagline,
+  start_url: '/',
   icons: [
     {
       src: icon_192,
