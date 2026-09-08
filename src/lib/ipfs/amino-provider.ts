@@ -7,7 +7,7 @@ import { webSockets } from '@libp2p/websockets'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { CID } from 'multiformats/cid'
-import type { PeerId } from '@libp2p/interface'
+import type { PrivateKey } from '@libp2p/interface'
 
 const defaultBootstrapList = [
   '/dnsaddr/bootstrap.libp2p.io/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
@@ -19,7 +19,7 @@ const defaultBootstrapList = [
 export interface IpfsProviderOpts {
   cids: CID[],
   addresses: string[],
-  peerId: PeerId,
+  privKey: PrivateKey
   peers?: string[],
 }
 
@@ -62,6 +62,7 @@ export class IpfsProvider {
       streamMuxers: [
         yamux(),
       ],
+      privateKey: opts.privKey,
     })
 
     // node.addEventListener('peer:discovery', (evt) => {

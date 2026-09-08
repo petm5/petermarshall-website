@@ -33,7 +33,7 @@ console.log(`🌐 Root CID: ${rootCid.toString()}`)
 await IpfsProvider.provide({
   cids: [rootCid],
   addresses,
-  peerId,
+  privKey,
 })
 
 console.log('✅ Done!')
