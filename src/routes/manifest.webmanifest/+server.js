@@ -24,11 +24,13 @@ const manifest = {
   icons: [
     {
       src: icon_192,
+      purpose: "any",
       sizes: "192x192",
       type: "image/avif"
     },
     {
       src: icon_512,
+      purpose: "any",
       sizes: "512x512",
       type: "image/avif"
     },
