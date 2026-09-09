@@ -15,9 +15,8 @@ import 'broadcastchannel-polyfill'
 import { sendIpniAnnouncement, type IpniAnnouncement } from '../src/lib/ipfs/ipni-announcement-sender'
 import { IpfsProvider } from '../src/lib/ipfs/amino-provider'
 import { CID } from 'multiformats/cid'
-import type { PeerId } from "@libp2p/interface";
+import type { PrivateKey } from "@libp2p/interface";
 import { privateKeyFromProtobuf } from '@libp2p/crypto/keys'
-import { peerIdFromPrivateKey } from '@libp2p/peer-id'
 
 import site from './lib/site.json' with { type: 'json' }
 
@@ -39,7 +38,7 @@ export interface Env {
 
 export class DhtPublisher extends DurableObject {
   private cachedPeers: string[]
-  private peerId: PeerId
+  private privKey: PrivateKey
 
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env)
@@ -47,9 +46,7 @@ export class DhtPublisher extends DurableObject {
     const b64Key = IPFS_PRIVATE_KEY
     if (!b64Key) throw new Error('IPFS_PRIVATE_KEY is missing from environment')
 
-    const privKey = privateKeyFromProtobuf(Uint8Array.fromBase64(b64Key))
-
-    this.peerId = peerIdFromPrivateKey(privKey)
+    this.privKey = privateKeyFromProtobuf(Uint8Array.fromBase64(b64Key))
   }
 
   async publish(): Promise<void> {
@@ -60,7 +57,7 @@ export class DhtPublisher extends DurableObject {
     const activePeers = await IpfsProvider.provide({
       cids: [rootCid],
       webHost,
-      peerId: this.peerId,
+      privKey: this.privKey,
       peers: this.cachedPeers,
     })
 
