@@ -10,12 +10,7 @@ import site from '../src/lib/site.json' with { type: 'json' }
 const distDir = path.resolve('build')
 const blocksDir = path.join(distDir, 'ipfs');
 
-const webHost = new URL(site.baseUrl).host
-
-const addresses = [
-  `/dns4/${webHost}/tcp/443/https`,
-  `/dns6/${webHost}/tcp/443/https`
-]
+const webHost = new URL(site.baseUrl)
 
 const rootCid = CID.parse(await fs.readFile(path.join(blocksDir, 'root'), { encoding: 'utf8' }))
 
@@ -32,7 +27,7 @@ console.log(`🌐 Root CID: ${rootCid.toString()}`)
 
 await IpfsProvider.provide({
   cids: [rootCid],
-  addresses,
+  webHost,
   privKey,
 })
 

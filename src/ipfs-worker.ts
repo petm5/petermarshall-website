@@ -30,12 +30,7 @@ const ipniAnnouncement = IPNI_ANNOUNCEMENT as unknown as IpniAnnouncement
 const indexerHost = new URL(INDEXER_HOST)
 const rootCid = CID.parse(ROOT_CID)
 
-const webHost = new URL(site.baseUrl).host
-
-const addresses = [
-  `/dns4/${webHost}/tcp/443/https`,
-  `/dns6/${webHost}/tcp/443/https`
-]
+const webHost = new URL(site.baseUrl)
 
 export interface Env {
   DHT_PUBLISHER: DurableObjectNamespace<DhtPublisher>
@@ -64,7 +59,7 @@ export class DhtPublisher extends DurableObject {
 
     const activePeers = await IpfsProvider.provide({
       cids: [rootCid],
-      addresses,
+      webHost,
       peerId: this.peerId,
       peers: this.cachedPeers,
     })

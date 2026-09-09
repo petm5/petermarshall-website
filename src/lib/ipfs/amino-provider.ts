@@ -18,7 +18,7 @@ const defaultBootstrapList = [
 
 export interface IpfsProviderOpts {
   cids: CID[],
-  addresses: string[],
+  webHost: URL,
   privKey: PrivateKey
   peers?: string[],
 }
@@ -28,6 +28,11 @@ export class IpfsProvider {
     const bootstrapList = [
       ...defaultBootstrapList,
       ...opts.peers ?? []
+    ]
+
+    const addresses = [
+      `/dns4/${opts.webHost.host}/tcp/443/https`,
+      `/dns6/${opts.webHost.host}/tcp/443/https`
     ]
 
     const node = await createLibp2p({
@@ -43,7 +48,7 @@ export class IpfsProvider {
         identify: identify()
       },
       addresses: {
-        announce: opts.addresses
+        announce: addresses
       },
       connectionManager: {
         maxConnections: 5
